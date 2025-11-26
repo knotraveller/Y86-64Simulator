@@ -2,7 +2,7 @@
 
 ## 简介
 
-你将实现一个 Y86-64 指令集模拟器。
+实现一个 Y86-64 指令集模拟器。
 
 ```bash
 Y86-64-Simulator/
@@ -13,13 +13,14 @@ Y86-64-Simulator/
 │
 ├─ test.py         # 测试脚本：运行模拟器 + 对比结果
 │
-└─ ...             # 自定义模拟器代码（cpu.h, cpu.cpp, cpu.py, Makefile 仅供参考）
+└─ code/            # 自定义模拟器代码
 ```
 
 ## 测试方法
 
-运行 `python test.py --bin {你的 cpu 可执行文件路径}`
+运行 `python test.py --bin "python ./code/run.py"`
 
+自定义：
 * 如果你的 cpu 可执行文件为 `./cpu`，运行 `python test.py --bin ./cpu`
 
 * 如果你的 cpu 需要解释器，运行 `python test.py --bin "python cpu.py"`
