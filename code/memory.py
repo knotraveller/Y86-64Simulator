@@ -3,6 +3,7 @@ import datautils
 class Mem:
     def __init__(self):
         # Dictionary mapping integer address -> integer byte (0-255)
+        # self.mem = {addr: byte, ...}
         self.mem = datautils.load_code()
 
     def read_byte(self, addr):

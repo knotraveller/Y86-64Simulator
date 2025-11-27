@@ -32,7 +32,7 @@ def to_unsigned(n):
 # =================================================================================
 # LOADER UTILS
 # =================================================================================
-def load_code():
+def load_code() -> dict:
     lines = sys.stdin.readlines()
     mem = {}
     for line in lines:

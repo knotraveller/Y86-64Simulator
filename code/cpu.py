@@ -52,8 +52,6 @@ class CPUSimulator(Raw_CPU):
         self.icode = (icode_ifun >> 4) & 0xF
         self.ifun = icode_ifun & 0xF
         
-        # Valid instruction check could happen here, but STAT_INS logic is usually end of cycle
-        
         self.rA = 15
         self.rB = 15
         self.valC = 0
@@ -86,12 +84,12 @@ class CPUSimulator(Raw_CPU):
         # Determine srcA
         self.srcA = 15
         if self.icode in [2, 4, 6, 10]: self.srcA = self.rA
-        elif self.icode in [9, 11]: self.srcA = REG_ID['rsp'] # %rsp
+        elif self.icode in [9, 11]: self.srcA = 4 # %rsp
         
         # Determine srcB
         self.srcB = 15
         if self.icode in [4, 5, 6]: self.srcB = self.rB
-        elif self.icode in [8, 9, 10, 11]: self.srcB = REG_ID['rsp'] # %rsp
+        elif self.icode in [8, 9, 10, 11]: self.srcB = 4 # %rsp
         
         # Read registers
         self.valA = self.reg[self.srcA] if self.srcA != 15 else 0
@@ -166,7 +164,6 @@ class CPUSimulator(Raw_CPU):
         self.valM = 0
         
         # Check for Address Error logic (Basic check for negative addresses)
-        # Note: In a real Dict memory, only negative keys are conceptually "out of bounds" for valid addr
         check_addr = -1
         if self.icode in [4, 10, 8]: check_addr = self.valE # Writes
         elif self.icode in [5]: check_addr = self.valE # Reads
@@ -234,9 +231,10 @@ class CPUSimulator(Raw_CPU):
         # Execute stages in order
         self.fetch()
         if self.STAT != STAT_AOK: return
-        
         self.decode()
+        if self.STAT != STAT_AOK: return
         self.execute()
+        if self.STAT != STAT_AOK: return
         self.memory_stage()
         self.write_back()
         if self.STAT != STAT_AOK: return
